@@ -52,11 +52,22 @@ public class BST {
     }
 
 
-    public void traverseLNR(wordNode n) {
+    public void traverseLNR(wordNode n, int i) {
 //        if (n == null) return;
-        if (n.left != null) traverseLNR(n.left);
-        System.out.println(n.word);
-        if (n.right != null) traverseLNR(n.right);
+        if(i==0) return;
+
+
+        if (n.left != null) traverseLNR(n.left,i-1);
+        System.out.print("\u001B[31m" + n.word + ": ");
+
+        // Print the meaning in a different color (e.g., blue)
+        System.out.print("\u001B[34m" + n.meaning);
+
+        // Reset the color to the default
+//        System.out.print("\u001B[0m");
+
+        System.out.println();
+        if (n.right != null) traverseLNR(n.right,i-1);
     }
 
 
