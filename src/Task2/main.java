@@ -1,60 +1,45 @@
 package Task2;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class main {
 
-
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
         BST dictionary = new BST();
 
-        File newFile = new File("src\\Task2\\Dictionary.txt");
+        File newFile = new File("src/Task2/Dictionary.txt");
 
-        Scanner myReader = new Scanner(newFile);
+        try (Scanner myReader = new Scanner(newFile)) {
+            String[] splittingWords = {"n\\.", "-n\\.", "v\\.", "-v\\.", "adj\\.", "-adj\\.", "prefix", "abbr\\.",
+                    "naut\\.", "symb\\.", "colloq\\.", "comb\\.", "predic\\.","int\\.","prep\\.","contr\\.",
+                    "poss\\.","pron\\.","suffix","var\\.","attrib\\.","Adv\\."
+            };
 
-        while(myReader.hasNextLine()){
+            // Create the regular expression by joining splittingWords with the | (OR) operator
+            String regex = String.join("|", splittingWords);
 
+            System.out.println("The regex according to which I'm splitting the word and meaning: " + regex);
 
-            String line = myReader.nextLine();
-            if(line.length() <= 2){
-//                myReader.nextLine();
+            while (myReader.hasNextLine()) {
+                String line = myReader.nextLine().trim();
+
+                if (!line.isEmpty()) {
+                    String[] wordMeaning = line.split(regex, 2);
+                    if (wordMeaning.length == 2) {
+                        dictionary.insert(wordMeaning[0].trim(), wordMeaning[1].trim());
+                    }
+                }
             }
-
-            else{
-
-
-                String[] wordMeaning;
-
-
-                wordMeaning = line.split(" ",2);
-
-                dictionary.insert(wordMeaning[0],wordMeaning[1]);
-
-
-
-            }
-
-
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
 
+        System.out.println(dictionary.size);
 
+        int layerToPrint = 5;
 
-        int layerToPrint = 1;
-//        this is basically how far you want to print the tree, since the entire tree printing causes
-//        StackOverflow exception
-
-
-
-
-        dictionary.traverseLNR(dictionary.root,layerToPrint);
-
-
-
+        dictionary.traverseLNR(dictionary.root, layerToPrint);
     }
-
 }

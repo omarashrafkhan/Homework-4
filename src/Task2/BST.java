@@ -25,6 +25,8 @@ public class BST {
 
     wordNode root;
 
+    int size;
+
 
     public void insert(String word, String meaning){
         if (root == null) root = new wordNode(word,meaning);
@@ -41,8 +43,14 @@ public class BST {
                     curr = curr.right;
                 } else return;
             }
-            if (word.compareTo(prev.word) < 0) prev.left = new wordNode(word,meaning);
-            else prev.right = new wordNode(word,meaning);
+            if (word.compareTo(prev.word) < 0){
+                prev.left = new wordNode(word,meaning);
+                size++;
+            }
+            else{
+                prev.right = new wordNode(word,meaning);
+                size++;
+            }
 
         }
 
@@ -140,15 +148,16 @@ public class BST {
         if (temp != null && word.compareTo(temp.word) == 0) {
             if (temp.left == null && temp.right == null) { // no child case
                 delNoChild(parent, temp);
+                size--;
 
             } // one child case
             else if (temp.left == null || temp.right == null) {
-                delOneChild(parent, temp);
+                delOneChild(parent, temp); size--;
             } else {
                 //have two children
                 wordNode successor = findSuccessor(temp);
                 temp.word = successor.word;
-                delOneChild(parent, successor);
+                delOneChild(parent, successor);size--;
 
             }
         } else {
